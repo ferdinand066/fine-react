@@ -4,7 +4,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useTheme } from "next-themes";
+import ThemeToggle from "./ThemeToggle";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
@@ -12,13 +12,10 @@ function classNames(...classes: any[]) {
 
 export default function Header() {
   const route = useRouter();
-  const {theme, setTheme} = useTheme();
 
   function checkRoute(routeName : string) : boolean {
       return route.pathname.includes(routeName);
   }
-
-  setTheme("dark");
 
   return (
     <Disclosure as="nav" className="bg-white shadow dark:bg-gray-800">
@@ -60,6 +57,7 @@ export default function Header() {
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <ThemeToggle />
                 <button className="bg-white dark:bg-transparent p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-transparent">
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
