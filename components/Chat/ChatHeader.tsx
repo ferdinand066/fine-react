@@ -1,7 +1,7 @@
 export default function ChatHeader(props: any) {
   let person = props.person;
   return (
-    <li className="p-4 cursor-pointer hover:bg-gray-600">
+    <li className="p-4 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600">
       <div className="flex items-center space-x-4">
         <div className="flex-shrink-0">
           <img className="h-12 w-12 rounded-full" src={person.imageUrl} alt="" />

@@ -1,17 +1,31 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import Login from "./Modal/auth/Login";
+import Register from "./Modal/auth/Register";
+import NotificationContainer from "./Notification/NotificationContainer";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
+
   const route = useRouter();
+  const [openLogin, setOpenLogin] = useState(false);
+  const [openRegister, setOpenRegister] = useState(false);
+
+  function setOpenLoginState(state : boolean) : void {
+    setOpenLogin(state);
+  }
+
+  function setOpenRegisterState(state : boolean) : void {
+    setOpenRegister(state);
+  }
 
   function checkRoute(routeName : string) : boolean {
       return route.pathname.includes(routeName);
@@ -42,18 +56,26 @@ export default function Header() {
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  <Link href="/friend">
+                  <Link href="/friend" passHref>
                     <span className={ (checkRoute("friend") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
                         + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
                       Friend
                     </span>
                   </Link>
-                  <Link href="/chat">
+                  <Link href="/chat" passHref>
                     <span className={ (checkRoute("chat") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
                         + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
                         Chat
                     </span>
                   </Link>
+                    <span onClick={ () => setOpenLoginState(true) } className={ (checkRoute("login") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
+                        + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
+                      Login
+                    </span>
+                    <span onClick={ () => setOpenRegisterState(true) } className={ (checkRoute("register") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
+                        + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
+                      Register
+                    </span>
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -142,18 +164,22 @@ export default function Header() {
           <Disclosure.Panel className="sm:hidden">
             <div className="pt-2 pb-4 space-y-1">
               {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
-              <Link href="/friend">
+              <Link href="/friend" passHref>
                   <span className={ (checkRoute("friend") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
                     : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
                     + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Friend</span>
               </Link>
-              <Link href="/chat">
+              <Link href="/chat" passHref>
                   <span className={ (checkRoute("chat") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
                     : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
                     + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Chat</span>
               </Link>
             </div>
           </Disclosure.Panel>
+
+          <Login openLogin={ openLogin } setOpenLogin={ setOpenLoginState } setOpenRegister={ setOpenRegisterState }/>
+          <Register openRegister={ openRegister } setOpenLogin={ setOpenLoginState } setOpenRegister={ setOpenRegisterState }/>
+          <NotificationContainer />
         </>
       )}
     </Disclosure>
