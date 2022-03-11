@@ -1,5 +1,4 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { useTheme } from 'next-themes';
 
@@ -36,7 +35,7 @@ export default function ThemeToggle() {
       >
         <span
           className={classNames(
-            checkEnable() ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200',
+            (checkEnable() ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200'),
             'absolute inset-0 h-full w-full flex items-center justify-center transition-opacity'
           )}
           aria-hidden="true"

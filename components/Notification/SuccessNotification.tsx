@@ -1,16 +1,38 @@
 import { Transition } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/solid'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { useAppContext } from '../../context/State';
 
 
-export default function SuccessNotification({ title, content } : any){
+export default function SuccessNotification({ title, content, id } : any){
     const [show, setShow] = useState(true);
-    console.log(show)
+    const sharedState = useAppContext();
 
-    setTimeout(() => {
-        setShow(false);
-    }, 5000);
+    function closeNotification(){
+      let deletedIndex = -1;
+      for (var i = 0; i < sharedState.notificationList.length; i++) {
+        if (sharedState.notificationList[i].id === id) {
+          deletedIndex = i;
+          break;
+        }
+      }
+      let data = [...sharedState.notificationList];
+      if (deletedIndex !== -1){
+        data.splice(deletedIndex, 1);
+        sharedState.setNotificationList(data);
+      }
+
+    }
+
+    useEffect(async () => {
+      const timer = await setTimeout(() => {
+        console.log('here')
+        closeNotification();
+      }, 5000);
+      setShow(false);
+      clearTimeout(timer);
+    }, []);
 
     return (          
     <Transition
@@ -36,9 +58,7 @@ export default function SuccessNotification({ title, content } : any){
               <div className="ml-4 flex-shrink-0 flex">
                 <button
                   className="bg-transparent rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none"
-                  onClick={() => {
-                    setShow(false)
-                  }}
+                  onClick={ closeNotification }
                 >
                   <span className="sr-only">Close</span>
                   <XIcon className="h-5 w-5" aria-hidden="true" />

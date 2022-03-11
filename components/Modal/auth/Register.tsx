@@ -1,27 +1,36 @@
 import React, { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
-import SuccessNotification from '../../Notification/SuccessNotification';
+import { useAppContext } from '../../../context/State';
 
 export default function Register(props : any) {
   const cancelButtonRef = useRef();
+  const sharedState = useAppContext();
   
   async function submitRegisterForm(e : any) : Promise<any> {
     e.preventDefault();
     let formData = new FormData(document.getElementById('registerForm') as HTMLFormElement);
-    
     props.setOpenRegister(false);
-    axios.post(process.env.apiPath + 'users', {
-      username : formData.get('username'),
-      email : formData.get('email'),
-      full_name : formData.get('full_name'),
-      password : formData.get('password')
-    }).then((res) => {
-      let notificationContainer = document.getElementById("notificationContainer");
-      
-    }, (err) => {
-      console.log(err);
-    })
+    sharedState.setNotificationList([...sharedState.notificationList, {
+          id: '_' + Math.random().toString(36).substr(2, 9),
+          title: "Success",
+          content: "Congratulations, your account has been successfully created."
+        }])
+    // axios.post(process.env.apiPath + 'users', {
+    //   username : formData.get('username'),
+    //   email : formData.get('email'),
+    //   full_name : formData.get('full_name'),
+    //   password : formData.get('password')
+    // }).then((res) => {
+    //   console.log(res)
+    //   sharedState.setNotificationState([...sharedState.notificationList, {
+    //     title: "Success",
+    //     content: "Congratulations, your account has been successfully created."
+    //   }])
+    // }, (err) => {
+    //   console.log(err);
+    // })
+
   }
 
   return (
