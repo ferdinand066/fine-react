@@ -5,34 +5,11 @@ import { Fragment, useEffect, useState } from 'react'
 import { useAppContext } from '../../context/State';
 
 
-export default function SuccessNotification({ title, content, id } : any){
+export default function SuccessNotification({ title, content, index, removeNotification } : any){
     const [show, setShow] = useState(true);
-    const sharedState = useAppContext();
-
     function closeNotification(){
-      let deletedIndex = -1;
-      for (var i = 0; i < sharedState.notificationList.length; i++) {
-        if (sharedState.notificationList[i].id === id) {
-          deletedIndex = i;
-          break;
-        }
-      }
-      let data = [...sharedState.notificationList];
-      if (deletedIndex !== -1){
-        data.splice(deletedIndex, 1);
-        sharedState.setNotificationList(data);
-      }
-
+      removeNotification(index);
     }
-
-    useEffect(async () => {
-      const timer = await setTimeout(() => {
-        console.log('here')
-        closeNotification();
-      }, 5000);
-      setShow(false);
-      clearTimeout(timer);
-    }, []);
 
     return (          
     <Transition

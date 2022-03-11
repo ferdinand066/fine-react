@@ -5,6 +5,12 @@ import SuccessNotification from "./SuccessNotification";
 export default function NotificationContainer() {
   const sharedState = useAppContext();
 
+  function removeNotification(index : any){
+    let data = [...sharedState.notificationList];
+    data.splice(index, 1);
+    sharedState.setNotificationList(data);
+  }
+
   return (
     <>
       <div
@@ -15,7 +21,7 @@ export default function NotificationContainer() {
             {/* <SuccessNotification title="asd" content="asd" /> */}
             { sharedState.notificationList?.map((notification : any, index : number) => {
                 return (
-                    <SuccessNotification title={ notification.title } content={ notification.content } key={index} id={ notification.id }/>
+                    <SuccessNotification title={ notification.title } content={ notification.content } key={index} id={ index } removeNotification={ removeNotification }/>
                 )
               })  
             }

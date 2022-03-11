@@ -11,25 +11,21 @@ export default function Register(props : any) {
     e.preventDefault();
     let formData = new FormData(document.getElementById('registerForm') as HTMLFormElement);
     props.setOpenRegister(false);
-    sharedState.setNotificationList([...sharedState.notificationList, {
-          id: '_' + Math.random().toString(36).substr(2, 9),
-          title: "Success",
-          content: "Congratulations, your account has been successfully created."
-        }])
-    // axios.post(process.env.apiPath + 'users', {
-    //   username : formData.get('username'),
-    //   email : formData.get('email'),
-    //   full_name : formData.get('full_name'),
-    //   password : formData.get('password')
-    // }).then((res) => {
-    //   console.log(res)
-    //   sharedState.setNotificationState([...sharedState.notificationList, {
-    //     title: "Success",
-    //     content: "Congratulations, your account has been successfully created."
-    //   }])
-    // }, (err) => {
-    //   console.log(err);
-    // })
+
+    axios.post(process.env.apiPath + 'users', {
+      username : formData.get('username'),
+      email : formData.get('email'),
+      full_name : formData.get('full_name'),
+      password : formData.get('password')
+    }).then((res) => {
+      sharedState.setNotificationList([...sharedState.notificationList, {
+        id: '_' + Math.random().toString(36).substr(2, 9),
+        title: "Success",
+        content: "Congratulations, your account has been successfully created."
+      }])
+    }, (err) => {
+      console.log(err);
+    })
 
   }
 

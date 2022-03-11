@@ -1,9 +1,32 @@
 import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import axios from 'axios';
+import { useAppContext } from '../../../context/State';
 
 export default function Login(props : any) {
   const cancelButtonRef = useRef();
+  const sharedState = useAppContext();
   
+  async function submitLoginForm(e : any) : Promise<any> {
+    e.preventDefault();
+    let formData = new FormData(document.getElementById('registerForm') as HTMLFormElement);
+    props.setOpenRegister(false);
+
+    axios.post(process.env.apiPath + 'auth/login', {
+      username : formData.get('email'),
+      password : formData.get('password')
+    }).then((res) => {
+      sharedState.setNotificationList([...sharedState.notificationList, {
+        id: '_' + Math.random().toString(36).substr(2, 9),
+        title: "Success",
+        content: "Welcome back!"
+      }])
+      console.log(res)
+    }, (err) => {
+      console.log(err);
+    })
+
+  }
 
   return (
     <Transition.Root show={props.openLogin} as={Fragment}>
