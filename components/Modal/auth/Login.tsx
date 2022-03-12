@@ -2,10 +2,13 @@ import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import axios from 'axios';
 import { useAppContext } from '../../../context/State';
+import { setCookies } from 'cookies-next';
+import { useRouter } from 'next/router';
 
 export default function Login(props : any) {
   const cancelButtonRef = useRef();
   const sharedState = useAppContext();
+  const router = useRouter();
   
   async function submitLoginForm(e : any) : Promise<any> {
     e.preventDefault();
@@ -23,8 +26,23 @@ export default function Login(props : any) {
       }])
       sharedState.setUser(res.data.user);
       sharedState.setJwt(res.data.access_token);
+      setCookies('jwt', res.data.access_token, {
+        maxAge: 60 * 60 * 24,
+        sameSite: true
+      })
+
+      setCookies('user', JSON.stringify(res.data.user), {
+        maxAge: 60 * 60 * 24,
+        sameSite: true
+      })
+      router.push('/friend');
+      
     }, (err) => {
-      console.log(err);
+      sharedState.setNotificationList([...sharedState.notificationList, {
+        id: '_' + Math.random().toString(36).substr(2, 9),
+        title: "Failed",
+        content: "Wrong credential."
+      }])
     })
 
   }

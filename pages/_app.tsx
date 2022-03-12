@@ -2,13 +2,16 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { AppWrapper } from '../context/State'
+import ProtectedRoute from '../context/ProtectedRoute'
 
-function MyApp({ Component, pageProps } : AppProps) {
+function MyApp({ Component, pageProps, router } : AppProps) {
   return (
     <AppWrapper>
-      <ThemeProvider attribute="class">
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <ProtectedRoute router={ router }>
+        <ThemeProvider attribute="class">
+          <Component {...pageProps} />
+        </ThemeProvider>  
+      </ProtectedRoute>
     </AppWrapper>
   )
 }

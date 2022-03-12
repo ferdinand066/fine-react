@@ -2,10 +2,12 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import ChatHeaderList from "../../components/Chat/ChatHeaderList";
 import Header from "../../components/Header";
+import { useAppContext } from "../../context/State";
 
 
 const Chat: NextPage = () => {
-  return (
+  const sharedState = useAppContext();
+  return ( sharedState.authenticated() &&
     <div>
       <Head>
         <title>FINE | Chat</title>

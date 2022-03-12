@@ -8,13 +8,15 @@ import ThemeToggle from "./ThemeToggle";
 import Login from "./Modal/auth/Login";
 import Register from "./Modal/auth/Register";
 import NotificationContainer from "./Notification/NotificationContainer";
+import { useAppContext } from "../context/State";
+import { removeCookies } from "cookies-next";
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Header() {
-
+  const sharedState = useAppContext();
   const route = useRouter();
   const [openLogin, setOpenLogin] = useState(false);
   const [openRegister, setOpenRegister] = useState(false);
@@ -29,6 +31,18 @@ export default function Header() {
 
   function checkRoute(routeName : string) : boolean {
       return route.pathname.includes(routeName);
+  }
+
+  function logout(){
+    removeCookies('jwt');
+    removeCookies('user');
+    sharedState.setUser(null);
+    sharedState.setJwt(null);
+    sharedState.setNotificationList([...sharedState.notificationList, {
+      id: '_' + Math.random().toString(36).substr(2, 9),
+      title: "Success",
+      content: "You have successfully logged out!"
+    }])
   }
 
   return (
@@ -56,26 +70,44 @@ export default function Header() {
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
-                  <Link href="/friend" passHref>
-                    <span className={ (checkRoute("friend") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
-                        + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
-                      Friend
-                    </span>
-                  </Link>
-                  <Link href="/chat" passHref>
-                    <span className={ (checkRoute("chat") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
-                        + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
-                        Chat
-                    </span>
-                  </Link>
+                  { sharedState.user ?
+                    <Link href="/friend" passHref>
+                      <span className={ (checkRoute("friend") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
+                          + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
+                        Friend
+                      </span>
+                    </Link> : ""
+                  }
+                  {
+                    sharedState.user ? 
+                      <Link href="/chat" passHref>
+                        <span className={ (checkRoute("chat") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
+                            + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
+                            Chat
+                        </span>
+                      </Link> : ''
+                  }
+                  {
+                    !sharedState.user ?
                     <span onClick={ () => setOpenLoginState(true) } className={ (checkRoute("login") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
                         + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
                       Login
-                    </span>
+                    </span> : '' 
+                  }
+                  {
+                    !sharedState.user ?
                     <span onClick={ () => setOpenRegisterState(true) } className={ (checkRoute("register") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
                         + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
                       Register
-                    </span>
+                    </span> : ''
+                  }
+                  {
+                    sharedState.user ?
+                    <span onClick={ logout } className={ (checkRoute("logout") ? "border-indigo-500 text-gray-900 dark:text-white" : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 dark:hover:border-gray-400") 
+                        + " inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium cursor-pointer"}>
+                      Logout
+                    </span> : ''
+                  }
                 </div>
               </div>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">

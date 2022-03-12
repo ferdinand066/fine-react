@@ -1,8 +1,9 @@
-import { ChatIcon, MailIcon, PhoneIcon } from "@heroicons/react/outline";
+
 import type { NextPage } from "next";
 import Head from "next/head";
 import FriendList from "../../components/Friend/FriendList";
 import Header from "../../components/Header";
+import { useAppContext } from "../../context/State";
 
 const people = [
   {
@@ -18,7 +19,8 @@ const people = [
 ];
 
 const Friend: NextPage = () => {
-  return (
+  const sharedState = useAppContext();
+  return ( sharedState.authenticated() &&
     <div>
       <Head>
         <title>FINE | Chat</title>
