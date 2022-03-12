@@ -24,7 +24,11 @@ export default function Register(props : any) {
         content: "Congratulations, your account has been successfully created."
       }])
     }, (err) => {
-      console.log(err);
+      sharedState.setNotificationList([...sharedState.notificationList, {
+        id: '_' + Math.random().toString(36).substr(2, 9),
+        title: "Failed",
+        content: "Email or username already exists."
+      }])
     })
 
   }

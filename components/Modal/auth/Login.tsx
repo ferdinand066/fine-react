@@ -9,11 +9,11 @@ export default function Login(props : any) {
   
   async function submitLoginForm(e : any) : Promise<any> {
     e.preventDefault();
-    let formData = new FormData(document.getElementById('registerForm') as HTMLFormElement);
+    let formData = new FormData(document.getElementById('loginForm') as HTMLFormElement);
     props.setOpenRegister(false);
 
     axios.post(process.env.apiPath + 'auth/login', {
-      username : formData.get('email'),
+      username : formData.get('username'),
       password : formData.get('password')
     }).then((res) => {
       sharedState.setNotificationList([...sharedState.notificationList, {
@@ -21,7 +21,8 @@ export default function Login(props : any) {
         title: "Success",
         content: "Welcome back!"
       }])
-      console.log(res)
+      sharedState.setUser(res.data.user);
+      sharedState.setJwt(res.data.access_token);
     }, (err) => {
       console.log(err);
     })
@@ -64,7 +65,7 @@ export default function Login(props : any) {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <div className="inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <form id='loginForm' method='post' onSubmit={ submitLoginForm } className="inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div>
                 <div className="mx-auto flex items-center justify-center text-4xl rounded-full text-indigo-500 font-bold">
                   FINE
@@ -98,7 +99,7 @@ export default function Login(props : any) {
               </div>
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
                 <button
-                  type="button"
+                  type="submit"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                   onClick={() => props.setOpenLogin(false)}
                 >
@@ -113,7 +114,7 @@ export default function Login(props : any) {
                   Cancel
                 </button>
               </div>
-            </div>
+            </form>
           </Transition.Child>
         </div>
       </Dialog>
