@@ -6,7 +6,6 @@ import { setCookies } from 'cookies-next';
 import { useRouter } from 'next/router';
 
 export default function Login(props : any) {
-  const cancelButtonRef = useRef();
   const sharedState = useAppContext();
   const router = useRouter();
   
@@ -24,17 +23,13 @@ export default function Login(props : any) {
         title: "Success",
         content: "Welcome back!"
       }])
-      sharedState.setUser(res.data.user);
       sharedState.setJwt(res.data.access_token);
       setCookies('jwt', res.data.access_token, {
         maxAge: 60 * 60 * 24,
         sameSite: true
       })
 
-      setCookies('user', JSON.stringify(res.data.user), {
-        maxAge: 60 * 60 * 24,
-        sameSite: true
-      })
+      sharedState.updateUser(res.data.user)
       router.push('/friend');
       
     }, (err) => {
@@ -53,7 +48,6 @@ export default function Login(props : any) {
         as="div"
         static
         className="fixed z-10 inset-0 overflow-y-auto"
-        initialFocus={cancelButtonRef}
         open={props.openLogin}
         onClose={() => props.setOpenLogin(false)}
       >
@@ -83,7 +77,7 @@ export default function Login(props : any) {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <form id='loginForm' method='post' onSubmit={ submitLoginForm } className="inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <form id='loginForm' method='post' onSubmit={ submitLoginForm } className="inline-block bg-white dark:bg-gray-700 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 align-middle sm:max-w-lg w-full sm:p-6">
               <div>
                 <div className="mx-auto flex items-center justify-center text-4xl rounded-full text-indigo-500 font-bold">
                   FINE
@@ -95,7 +89,7 @@ export default function Login(props : any) {
                       type="email"
                       name="username"
                       id="email"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
+                      className="dark:bg-gray-600 dark:text-gray-300 dark:border-transparent dark:shadow-inner shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                       placeholder="Email address"
                     />
                   </div>
@@ -104,7 +98,7 @@ export default function Login(props : any) {
                       type="password"
                       name="password"
                       id="password"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
+                      className="dark:bg-gray-600 dark:text-gray-300 dark:border-transparent dark:shadow-inner shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                       placeholder="Password"
                     />
                   </div>
@@ -127,7 +121,6 @@ export default function Login(props : any) {
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                   onClick={() => props.setOpenLogin(false)}
-                  ref={cancelButtonRef}
                 >
                   Cancel
                 </button>

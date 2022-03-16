@@ -36,7 +36,7 @@ export default function Header() {
   function logout(){
     removeCookies('jwt');
     removeCookies('user');
-    sharedState.setUser(null);
+    sharedState.updateUser();
     sharedState.setJwt(null);
     sharedState.setNotificationList([...sharedState.notificationList, {
       id: '_' + Math.random().toString(36).substr(2, 9),
@@ -196,16 +196,40 @@ export default function Header() {
           <Disclosure.Panel className="sm:hidden">
             <div className="pt-2 pb-4 space-y-1">
               {/* Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" */}
-              <Link href="/friend" passHref>
+              {
+                sharedState.user && 
+                <Link href="/friend" passHref>
                   <span className={ (checkRoute("friend") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
                     : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
                     + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Friend</span>
-              </Link>
-              <Link href="/chat" passHref>
+                </Link>
+              }
+              {
+                sharedState.user && 
+                <Link href="/chat" passHref>
                   <span className={ (checkRoute("chat") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
                     : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
                     + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Chat</span>
-              </Link>
+                </Link>
+              }
+              {
+                !sharedState.user &&
+                <span onClick={ () => setOpenLoginState(true) } className={ (checkRoute("login") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
+                  : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
+                  + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Login</span>
+              }
+              {
+                !sharedState.user &&
+                <span onClick={ () => setOpenRegisterState(true) } className={ (checkRoute("register") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
+                  : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
+                  + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Register</span>
+              }
+              {
+                sharedState.user &&
+                <span onClick={ logout } className={ (checkRoute("logout") ? "bg-indigo-50 border-indigo-500 text-indigo-700" 
+                  : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700") 
+                  + " block pl-3 pr-4 py-2 border-l-4 text-base font-medium"}>Logout</span>
+              }
             </div>
           </Disclosure.Panel>
 

@@ -1,8 +1,8 @@
 import { useAppContext } from "./State";
 
-const isBrowser = () => typeof window !== "undefined";
-
 const ProtectedRoute = ({ children, router } : any) => {
+
+  const isBrowser = () => typeof window !== "undefined";
 
   //Identify authenticated user
   const { user } = useAppContext();

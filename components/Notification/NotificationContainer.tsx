@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/State";
 import SuccessNotification from "./Notification";
 
@@ -12,7 +12,6 @@ export default function NotificationContainer() {
   }
 
   return (
-    <>
       <div
         aria-live="assertive"
         className="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start"
@@ -27,6 +26,5 @@ export default function NotificationContainer() {
             }
         </div>
       </div>
-    </>
   )
 }

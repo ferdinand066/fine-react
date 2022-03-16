@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useAppContext } from '../../../context/State';
 
 export default function Register(props : any) {
-  const cancelButtonRef = useRef();
   const sharedState = useAppContext();
   
   async function submitRegisterForm(e : any) : Promise<any> {
@@ -39,7 +38,6 @@ export default function Register(props : any) {
         as="div"
         static
         className="fixed z-10 inset-0 overflow-y-auto"
-        initialFocus={cancelButtonRef}
         open={props.openRegister}
         onClose={() => props.setOpenRegister(false)}
       >
@@ -69,7 +67,7 @@ export default function Register(props : any) {
             leaveFrom="opacity-100 translate-y-0 sm:scale-100"
             leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           >
-            <form id='registerForm' method='post' onSubmit={ submitRegisterForm } className="inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+            <form id='registerForm' method='post' onSubmit={ submitRegisterForm } className="inline-block align-bottom bg-white dark:bg-gray-700 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full sm:p-6">
               <div>
                 <div className="mx-auto flex items-center justify-center text-4xl rounded-full text-indigo-500 font-bold">
                   FINE
@@ -81,7 +79,7 @@ export default function Register(props : any) {
                       type="text"
                       name="full_name"
                       id="full_name"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
+                      className="dark:bg-gray-600 dark:text-gray-300 dark:border-transparent dark:shadow-inner shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                       placeholder="Full Name"
                     />
                   </div>
@@ -90,7 +88,7 @@ export default function Register(props : any) {
                       type="email"
                       name="email"
                       id="email"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
+                      className="dark:bg-gray-600 dark:text-gray-300 dark:border-transparent dark:shadow-inner shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                       placeholder="Email address"
                     />
                   </div>
@@ -99,7 +97,7 @@ export default function Register(props : any) {
                       type="text"
                       name="username"
                       id="username"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
+                      className="dark:bg-gray-600 dark:text-gray-300 dark:border-transparent dark:shadow-inner shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                       placeholder="Username"
                     />
                   </div>
@@ -108,7 +106,7 @@ export default function Register(props : any) {
                       type="password"
                       name="password"
                       id="password"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
+                      className="dark:bg-gray-600 dark:text-gray-300 dark:border-transparent dark:shadow-inner shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md text-black"
                       placeholder="Password"
                     />
                   </div>
@@ -130,7 +128,6 @@ export default function Register(props : any) {
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                   onClick={() => props.setOpenRegister(false)}
-                  ref={cancelButtonRef}
                 >
                   Cancel
                 </button>
